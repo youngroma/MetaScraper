@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base
+from app.database import Base
 
 
 class User(Base):
@@ -37,7 +37,7 @@ class URL(Base):
     scraped_at = Column(DateTime, nullable=True)
 
     upload = relationship("Upload", back_populates="urls")
-    metadata = relationship("Metadata", back_populates="url", uselist=False)
+    url_metadata = relationship("Metadata", back_populates="url", uselist=False)
 
 
 class Metadata(Base):
@@ -49,4 +49,4 @@ class Metadata(Base):
     description = Column(Text, nullable=True)
     keywords = Column(Text, nullable=True)
 
-    url = relationship("URL", back_populates="metadata")
+    url = relationship("URL", back_populates="url_metadata")
