@@ -3,7 +3,7 @@ from fastapi_jwt_auth import AuthJWT
 from app.config import settings
 from app.auth import auth_router
 from app.routes import router
-from app.database import SessionLocal, engine, Base
+from app.database import engine, Base
 import uvicorn
 
 Base.metadata.create_all(bind=engine)
