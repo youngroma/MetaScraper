@@ -3,19 +3,13 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 from fastapi_jwt_auth import AuthJWT
 from passlib.context import CryptContext
-from app.database import SessionLocal
+from app.database import SessionLocal, get_db
 from app.models import User
+from app.config import settings
 
 auth_router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 class UserSchema(BaseModel):
     email: EmailStr
@@ -32,7 +26,7 @@ def register(user: UserSchema, db: Session = Depends(get_db)):
 @auth_router.post("/login")
 def login(user: UserSchema, db: Session = Depends(get_db), Authorize: AuthJWT = Depends()):
     db_user = db.query(User).filter(User.email == user.email).first()
-    if not db_user or not pwd_context.verify(user.password, db_user.password_hash):
+    if not db_user or not pwd_context.verify(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     access_token = Authorize.create_access_token(subject=user.email)
