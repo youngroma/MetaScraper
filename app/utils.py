@@ -4,14 +4,25 @@ from bs4 import BeautifulSoup
 from sqlalchemy.orm import Session
 from app.models import URL, Metadata
 
+from urllib.parse import urlparse
+
+def is_valid_url(url: str) -> bool:
+    parsed = urlparse(url)
+    return bool(parsed.scheme and parsed.netloc)  # Must be a scheme and domain
+
 def process_csv(file_path: str) -> list:
     urls = []
     with open(file_path, newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             if row:
-                urls.append(row[0])
+                url = row[0].strip()  # Delete any gaps
+                if is_valid_url(url):
+                    urls.append(url)
+                else:
+                    print(f"Skipping invalid URL: {url}")
     return urls
+
 
 def scrape_metadata_from_url(url_obj: URL, db: Session) -> Metadata:
     try:

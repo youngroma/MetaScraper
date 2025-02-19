@@ -4,7 +4,7 @@ from celery import Celery, shared_task
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import URL, Metadata
-from app.utils import scrape_metadata_from_url
+from app.utils import scrape_metadata_from_url, is_valid_url
 from worker.celery_config import celery_app
 
 
@@ -20,10 +20,12 @@ def scrape_url(upload_id: int):
         urls = db.query(URL).filter(URL.upload_id == upload_id, URL.status == "pending").all()
         if not urls:
             logger.info("No pending URLs found.")
+            return
 
-        logger.info(f"Found {len(urls)} URLs to scrape.")
+        valid_urls = [url for url in urls if is_valid_url(url.url)]
+        logger.info(f"Found {len(valid_urls)} valid URLs to scrape.")
 
-        for url_obj in urls:
+        for url_obj in valid_urls:
             metadata = scrape_metadata_from_url(url_obj, db)
             if metadata:
                 url_obj.status = "success"
