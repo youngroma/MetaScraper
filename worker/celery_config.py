@@ -5,8 +5,8 @@ from celery import Celery
 
 celery_app = Celery(
     "tasks",
-    broker="redis://localhost:6379/0",  # Address of the Redis broker to be used for task queues
-    backend="redis://localhost:6379/0"  # Redis address to be used as backend for storing task results
+    broker="redis://redis:6379/0",  # Address of the Redis broker to be used for task queues
+    backend="redis://redis:6379/0"  # Redis address to be used as backend for storing task results
 )
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
