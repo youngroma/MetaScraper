@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi
+  namespace: metascraper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: fastapi
+          image: youngroma/fastapi-system:latest
+          envFrom:
+            - configMapRef:
+                name: metascraper-config
+            - secretRef:
+                name: metascraper-secrets
+          ports:
+            - containerPort: 8000
