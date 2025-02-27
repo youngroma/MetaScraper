@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metascraper-config
+  namespace: metascraper
+data:
+  POSTGRES_DB: scrape_url_fastapi
+  POSTGRES_PORT: "5433"
+  REDIS_PORT: "6379"
+  APP_PORT: "8000"
