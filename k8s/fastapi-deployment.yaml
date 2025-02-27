@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: youngroma/fastapi-system:latest
+          image: fastapi-system:latest
           envFrom:
             - configMapRef:
                 name: metascraper-config
