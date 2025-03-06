@@ -18,6 +18,7 @@ The application is composed of the following components:
 - **Redis**: Acts as a message broker for Celery tasks.
 - **Celery**: Manages asynchronous background tasks for scraping URLs.
 - **Docker**: Containerizes the application for consistent and reproducible deployments.
+- **Kubernetes**: For deploying and managing the application efficiently.
 
 ## Getting Started
 
@@ -34,7 +35,7 @@ The application is composed of the following components:
 2. **Environment Variables**:
 
    fill '.env' the file with environment variables
-
+   fill 'k8s/secrets.yaml' file with environment variables (for kubernetes)
 
    Replace variables with your desired credentials.
 
@@ -62,6 +63,19 @@ The application is composed of the following components:
    ```
 
    This ensures that the database schema is up-to-date.
+
+5. **Deploying with Kubernetes**
+   
+   - Apply the Kubernetes manifests from the k8s/ directory:
+
+   ```bash
+   kubectl apply -f k8s/
+   ```
+   - Verify the deployment:
+
+   ```bash
+   kubectl get pods -n metascraper
+   ```
 
 ### Usage
 
