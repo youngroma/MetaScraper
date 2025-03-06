@@ -59,4 +59,19 @@ services:
     networks:
       - monitoring
 
+  grafana:
+    image: grafana/grafana
+    restart: always
+    container_name: grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring
 
+networks:
+  monitoring:
+    driver: bridge
