@@ -34,8 +34,9 @@ The application is composed of the following components:
 
 2. **Environment Variables**:
 
-   fill '.env' the file with environment variables
-   fill 'k8s/secrets.yaml' file with environment variables (for kubernetes)
+   - fill '.env' the file with environment variables
+
+   - fill 'k8s/secrets.yaml' file with environment variables (for kubernetes)
 
    Replace variables with your desired credentials.
 
@@ -116,4 +117,13 @@ The application is composed of the following components:
 
    Once scraping is complete, retrieve the extracted metadata through the `/results/{task_id}` endpoint.
 
+5. **Monitoring and Metrics (Prometheus + Grafana)**
 
+   MetaScraper integrates Prometheus for collecting metrics and Grafana for visualizing them. This setup enables real-time monitoring of system performance and health.
+
+   - **Prometheus** is configured to scrape metrics from FastAPI, Redis, and PostgreSQL. It collects relevant data on system performance, including request counts, processing times, and health status.
+
+   - **Grafana** is used to visualize the metrics collected by Prometheus. It allows you to create dashboards for monitoring the performance of the FastAPI application, Redis, and PostgreSQL, providing insights into system health and response times.
+
+   - **Metrics Endpoint**
+The application exposes a `/metrics` endpoint that provides real-time metrics for Prometheus. This endpoint collects data such as request counts, response times, and system performance, which can be scraped by Prometheus for monitoring and visualization in Grafana.
