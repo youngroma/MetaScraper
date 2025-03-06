@@ -1,19 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, EmailStr
+from app.schemas import UserSchema
 from sqlalchemy.orm import Session
 from fastapi_jwt_auth import AuthJWT
 from passlib.context import CryptContext
-from app.database import SessionLocal, get_db
+from app.database import get_db
 from app.models import User
-from app.config import settings
 
 auth_router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-class UserSchema(BaseModel):
-    email: EmailStr
-    password: str
 
 @auth_router.post("/register")
 def register(user: UserSchema, db: Session = Depends(get_db)):
