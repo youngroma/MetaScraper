@@ -5,8 +5,8 @@ metadata:
   namespace: metascraper
 spec:
   ports:
-    - port: 5433
-      targetPort: 5433
+    - port: 5432
+      targetPort: 5432
   selector:
     app: postgres
 ---
@@ -32,7 +32,7 @@ spec:
             - secretRef:
                 name: metascraper-secrets
           ports:
-            - containerPort: 5433
+            - containerPort: 5432
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage
