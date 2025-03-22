@@ -1,6 +1,6 @@
 # MetaScraper
 
-MetaScraper is a web application that allows users to upload a CSV file containing a list of URLs. The system asynchronously scrapes each URL to extract meta tags—such as title, description, and keywords—and stores the results in a PostgreSQL database. The application is built with FastAPI, utilizes Celery for background task processing, Redis as a message broker, and Docker for containerization.
+MetaScraper is a web application that allows users to upload a CSV file containing a list of URLs. The system asynchronously scrapes each URL to extract meta tags—such as title, description, and keywords—and stores the results in a PostgreSQL database. The application is built with FastAPI, utilizes Celery for background task processing, Redis as a message broker, and Docker for containerization. Also it is deployed and managed using Kubernetes, ensuring scalability and high availability.
 
 ## Features  
 - **User Authentication**: Secure login system to ensure only authenticated users can access the functionalities.
@@ -36,7 +36,7 @@ The application is composed of the following components:
 
    - fill '.env' the file with environment variables
 
-   - fill 'k8s/secrets.yaml' file with environment variables (for kubernetes)
+   - fill  'k8s/secrets.yaml' file (in base64 format) with environment variables (for kubernetes)
 
    Replace variables with your desired credentials.
 
