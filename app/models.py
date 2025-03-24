@@ -48,5 +48,6 @@ class Metadata(Base):
     title = Column(String, nullable=True)
     description = Column(Text, nullable=True)
     keywords = Column(Text, nullable=True)
+    content = Column(Text, nullable=True)
 
     url = relationship("URL", back_populates="url_metadata")
