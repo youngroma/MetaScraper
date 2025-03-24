@@ -25,6 +25,7 @@ def process_csv(file_path: str) -> list:
 
 
 def scrape_metadata_from_url(url_obj: URL, db: Session) -> Metadata:
+    #   Feature to collect news from URL and their metadata
     try:
         response = requests.get(url_obj.url, timeout=5)
         response.raise_for_status()
@@ -36,20 +37,26 @@ def scrape_metadata_from_url(url_obj: URL, db: Session) -> Metadata:
     soup = BeautifulSoup(response.text, "html.parser")
 
     title = soup.find("title").get_text() if soup.find("title") else None
-    description = None
-    keywords = None
-
-    if soup.find("meta", attrs={"name": "description"}):
-        description = soup.find("meta", attrs={"name": "description"}).get("content")
-
-    if soup.find("meta", attrs={"name": "keywords"}):
-        keywords = soup.find("meta", attrs={"name": "keywords"}).get("content")
+    description = soup.find("meta", attrs={"name": "description"})["content"] if soup.find("meta", attrs={
+        "name": "description"}) else None
+    keywords = soup.find("meta", attrs={"name": "keywords"})["content"] if soup.find("meta", attrs={
+        "name": "keywords"}) else None
+    content = soup.find("meta", attrs={"property": "og:description"})["content"] if soup.find("meta", attrs={
+        "property": "og:description"}) else description
 
     print(f"Extracted metadata for {url_obj.url}: Title={title}, Description={description}, Keywords={keywords}")
 
-    metadata = Metadata(url_id=url_obj.id, title=title, description=description, keywords=keywords)
+    metadata = Metadata(
+        url_id=url_obj.id,
+        title=title,
+        description=description,
+        keywords=keywords,
+        content=content,
+    )
+
     db.add(metadata)
     db.commit()
+    db.refresh(metadata)
     print(f"Metadata saved for {url_obj.url}")
 
     return metadata
