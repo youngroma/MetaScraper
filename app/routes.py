@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Upload, URL, Metadata, User
 from app.utils import process_csv
-from app.tasks import scrape_url
+from app.tasks import scrape_and_analyze_url
 from fastapi_jwt_auth import AuthJWT
 import shutil
 import os
@@ -42,7 +42,7 @@ def upload_csv(background_tasks: BackgroundTasks, db: Session = Depends(get_db),
     db.commit()
 
     # Run the background task for scrapping metadata
-    scrape_url.delay(upload.id)  # Use the asynchronous Celery problem
+    scrape_and_analyze_url.delay(upload.id)  # Use the asynchronous Celery problem
 
     return {"message": "File uploaded successfully", "upload_id": upload.id}
 
@@ -76,6 +76,7 @@ def get_results(upload_id: int, db: Session = Depends(get_db)):
             "title": metadata.title if metadata else None,
             "description": metadata.description if metadata else None,
             "keywords": metadata.keywords if metadata else None,
+            "content": metadata.content if metadata else None,
         })
 
     return {"upload_id": upload_id, "results": results}
